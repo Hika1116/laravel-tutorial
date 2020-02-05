@@ -23,3 +23,8 @@ Route::get('/folders/create', 'FolderController@showCreateForm')->name('folders.
 
 // フォルダ作成処理の実行
 Route::post('folders/create', 'FolderController@create');
+
+
+Route::get('folders/{id}/tasks/create', 'TaskController@showCreateForm')->name('task.create');
+
+Route::post('folders/{id}/tasks/create', 'TaskController@create');
