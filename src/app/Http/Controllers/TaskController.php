@@ -19,11 +19,16 @@ class TaskController extends Controller
     public function index(Folder $folder)
     {
         // ユーザーのフォルダを取得する
+
         $folders = Auth::user()->folders()->get();
 
         // 選ばれたフォルダに紐づくタスクを取得する
         $tasks = $folder->tasks()->get();
 
+        if (Auth::user()->id !== $folder->user_id) {
+            abort(403);
+        }
+        
         return view('tasks/index', [
             'folders' => $folders,
             'current_folder_id' => $folder->id,
@@ -58,7 +63,7 @@ class TaskController extends Controller
         $folder->tasks()->save($task);
 
         return redirect()->route('tasks.index', [
-            'id' => $folder->id,
+            'folder' => $folder->id,
         ]);
     }
 
@@ -70,6 +75,8 @@ class TaskController extends Controller
      */
     public function showEditForm(Folder $folder, Task $task)
     {
+        $this->checkRelation($folder, $task);
+
         return view('tasks/edit', [
             'task' => $task,
         ]);
@@ -84,14 +91,23 @@ class TaskController extends Controller
      */
     public function edit(Folder $folder, Task $task, EditTask $request)
     {
+        $this->checkRelation($folder, $task);
+        
         $task->title = $request->title;
         $task->status = $request->status;
         $task->due_date = $request->due_date;
         $task->save();
 
         return redirect()->route('tasks.index', [
-            'id' => $task->folder_id,
+            'folder' => $task->folder_id,
         ]);
+    }
+
+    private function checkRelation(Folder $folder, Task $task)
+    {
+        if ($folder->id !== $task->folder_id) {
+            abort(404);
+        }
     }
     
 // namespace App\Http\Controllers;

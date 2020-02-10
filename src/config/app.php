@@ -134,6 +134,7 @@ return [
     |
     */
 
+    //プロバイダー定義
     'providers' => [
 
         /*
@@ -188,6 +189,7 @@ return [
     |
     */
 
+    //ファサード定義
     'aliases' => [
 
         'App' => Illuminate\Support\Facades\App::class,
@@ -227,5 +229,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
 
 ];

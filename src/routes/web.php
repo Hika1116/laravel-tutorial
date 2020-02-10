@@ -11,36 +11,32 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/app_view', function () {
+    dd(app());
+    // Cache::put('key', 'cached value', 300);
+    // echo Cache::get('key'); // cached value と表示される
 });
 
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', 'HomeController@index')->name('home');
 
-        // タスク一覧ページ表示
+    Route::get('/folders/create', 'FolderController@showCreateForm')->name('folders.create');
+    Route::post('/folders/create', 'FolderController@create');
+
+    Route::group(['middleware' => 'can:view,folder'], function () {
         Route::get('/folders/{folder}/tasks', 'TaskController@index')->name('tasks.index');
 
-        // フォルダ作成ページの表示
-        Route::get('/folders/create', 'FolderController@showCreateForm')->name('folders.create');
+        Route::get('/folders/{folder}/tasks/create', 'TaskController@showCreateForm')->name('tasks.create');
+        Route::post('/folders/{folder}/tasks/create', 'TaskController@create');
 
-        // フォルダ作成処理の実行
-        Route::post('folders/create', 'FolderController@create');
-
-        // タスク作成ページの表示
-        Route::get( 'folders/{folder}/tasks/create', 'TaskController@showCreateForm')->name('tasks.create');
-
-        // タスク作成処理の実行
-        Route::post( 'folders/{folder}/tasks/create', 'TaskController@create');
-
-        // タスク編集画面の表示
-        Route::get( 'folders/{folder}/tasks/{task}/edit', 'TaskController@showEditForm')->name('tasks.edit');
-
-        // タスク編集処理の実行
-        Route::post( 'folders/{folder}/tasks/{task}/edit', 'TaskController@edit');
-
-        //ホーム画面の表示
-        Route::get('/', 'HomeController@index')->name('home');
+        Route::get('/folders/{folder}/tasks/{task}/edit', 'TaskController@showEditForm')->name('tasks.edit');
+        Route::post('/folders/{folder}/tasks/{task}/edit', 'TaskController@edit');
+    });
 });
 
 Auth::routes();

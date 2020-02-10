@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -19,9 +20,16 @@ class HomeController extends Controller
             return view('home');
         }
 
+        $folders = $user->folders()->get();
+        $tasks = $folder->tasks()->get();
+
         // フォルダがあればそのフォルダのタスク一覧にリダイレクトする
         return redirect()->route('tasks.index', [
-            'id' => $folder->id,
+            'folder'=>1,
+            // 'id' => $folder->id,
+            // // 'folders' => $folders,
+            // // 'current_folder_id' => $folder->id,
+            // // 'tasks' => $tasks,
         ]);
     }
 }
