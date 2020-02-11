@@ -20,12 +20,12 @@ class HomeController extends Controller
             return view('home');
         }
 
-        $folders = $user->folders()->get();
-        $tasks = $folder->tasks()->get();
+        $folder = $user->folders()->first();
+        // $tasks = $folder->tasks()->get();
 
         // フォルダがあればそのフォルダのタスク一覧にリダイレクトする
         return redirect()->route('tasks.index', [
-            'folder'=>1,
+            'folder'=>$folder->id,
             // 'id' => $folder->id,
             // // 'folders' => $folders,
             // // 'current_folder_id' => $folder->id,
