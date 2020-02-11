@@ -26,6 +26,7 @@ services:
     volumes:
       - ./src:/work
       - ./logs:/var/log/nginx
+      - ./logs/laravel_log:/storage/logs
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     environment:
       - TZ=${TZ}

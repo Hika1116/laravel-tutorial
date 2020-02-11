@@ -16,7 +16,7 @@ class AddUserIdToFolders extends Migration
         Schema::table('folders', function (Blueprint $table) {
             $table->integer('user_id')->unsigned(); //カラムの追加
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;//外部キーを設定
+            $table->foreign('user_id')->references('id')->on('users');//外部キーを設定
         });
     }
 
